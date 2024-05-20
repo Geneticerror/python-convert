@@ -1,7 +1,7 @@
 PyConvert
 =========
 
-Converts python objects in xml or json documents, and viceversa.
+Converts python objects in xml or json documents, and vice versa.
 
 Installation
 ------------
@@ -236,7 +236,7 @@ You must see the next output.
 
 Convert XML document to Python Object
 -------------------------------------
-This example converts an xml document in a Python Object.
+This example converts a xml document in a Python Object.
 
      from pyconvert.pyconv import convertXML2OBJ
      from xml.dom.minidom import parseString
