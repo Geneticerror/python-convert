@@ -58,7 +58,7 @@ def check_type(obj):
 		return True
 
 
-def convert(class_to_convert, type_to_convert, skipNone=False):
+def convert(class_to_convert, type_to_convert, skipNone):
 	""" function to convert python object in a str or dict (with a representation of xml or json)
 		parameters:
 			class_to_convert, a python object to convert in a str or dict (python dictionary)
@@ -78,12 +78,12 @@ def convert(class_to_convert, type_to_convert, skipNone=False):
 			if skipNone and (d is None):
 				continue
 			if not check_type(d) and not isinstance(d, list):
-				data += convert(d, type_to_convert)
+				data += convert(d, type_to_convert, skipNone)
 			elif isinstance(d, list):
 				data += "<"+v+">"
 				for a in d:
 					if not check_type(a):
-						data += convert(a, type_to_convert)
+						data += convert(a, type_to_convert, skipNone)
 					elif check_type(a):
 						data += "<"+v+">"+unicode(a)+"</"+v+">"
 				data += "</"+v+">"
@@ -100,12 +100,12 @@ def convert(class_to_convert, type_to_convert, skipNone=False):
 		for v in filter_attr:
 			d = getattr(class_to_convert, v)
 			if not check_type(d) and not isinstance(d, list):
-				data[v] = convert(d, type_to_convert)
+				data[v] = convert(d, type_to_convert, skipNone)
 			elif isinstance(d, list):
 				list_of_element = list()
 				for a in d:
 					if not check_type(a):
-						list_of_element.append(convert(a, type_to_convert))
+						list_of_element.append(convert(a, type_to_convert, skipNone))
 					elif check_type(a):
 						list_of_element.append(a)
 
@@ -116,25 +116,25 @@ def convert(class_to_convert, type_to_convert, skipNone=False):
 		return data
 
 
-def convert2XML(class_to_convert):
+def convert2XML(class_to_convert, skipNone=False):
 	""" function to convert python object in a xml document
 		parameters:  
 			class_to_convert, a python object to convert in a xml document
 		returns:
 			xml.dom.minidom.Document						
 	"""
-	data = convert(class_to_convert, "xml")
+	data = convert(class_to_convert, "xml", skipNone=skipNone)
 	return parseString(data)
 
 
-def convert2JSON(class_to_convert):
+def convert2JSON(class_to_convert, skipNone=False):
 	""" function to convert python object in a json document (dict)
 		parameters:  
 			class_to_convert, a python object to convert in a json document (python dictionary)
 		returns:
 			dict						
 	"""
-	data = convert(class_to_convert, "json")
+	data = convert(class_to_convert, "json", skipNone=skipNone)
 	return json.loads(json.dumps(data))
 
 
