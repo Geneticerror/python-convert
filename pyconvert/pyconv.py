@@ -58,7 +58,7 @@ def check_type(obj):
 		return True
 
 
-def convert(class_to_convert, type_to_convert):
+def convert(class_to_convert, type_to_convert, skipNone=False):
 	""" function to convert python object in a str or dict (with a representation of xml or json)
 		parameters:
 			class_to_convert, a python object to convert in a str or dict (python dictionary)
@@ -75,6 +75,8 @@ def convert(class_to_convert, type_to_convert):
 		data = "<"+class_name+">"
 		for v in filter_attr:
 			d = getattr(class_to_convert, v)
+			if skipNone and (d is None):
+				continue
 			if not check_type(d) and not isinstance(d, list):
 				data += convert(d, type_to_convert)
 			elif isinstance(d, list):
